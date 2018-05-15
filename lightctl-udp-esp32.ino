@@ -302,13 +302,19 @@ void loop() {
   }
 
   for (uint16_t i = 0; i < TOTAL_LEDS; i++) {
-    uint8_t r = cur_payload[i * 3 + 0];
-    uint8_t g = cur_payload[i * 3 + 1];
-    uint8_t b = cur_payload[i * 3 + 2];
+    // Convert HSV to RGB
+    CHSV hsv(cur_payload[i * 3 + 0], cur_payload[i * 3 + 1], cur_payload[i * 3 + 2]);
+    CRGB rgb;
+    hsv2rgb_rainbow(hsv, rgb);
 
-    uint8_t r_adjusted = should_dither(dither_value, dither_lookup_r[r]) ? gamma_lookup_r[r] + 1: gamma_lookup_r[r];
-    uint8_t g_adjusted = should_dither(dither_value, dither_lookup_g[g]) ? gamma_lookup_g[g] + 1: gamma_lookup_g[g];
-    uint8_t b_adjusted = should_dither(dither_value, dither_lookup_b[b]) ? gamma_lookup_b[b] + 1: gamma_lookup_b[b];
+    // Convert HSV with maxed out brightness to RGB
+    CHSV hsv_max(cur_payload[i * 3 + 0], cur_payload[i * 3 + 1], 255);
+    CRGB rgb_max;
+    hsv2rgb_rainbow(hsv_max, rgb_max);
+
+    uint8_t r_adjusted = should_dither(dither_value, dither_lookup_r[rgb.red]) ? gamma_lookup_r[rgb.red] + 1: gamma_lookup_r[rgb.red];
+    uint8_t g_adjusted = should_dither(dither_value, dither_lookup_g[rgb.green]) ? gamma_lookup_g[rgb.green] + 1: gamma_lookup_g[rgb.green];
+    uint8_t b_adjusted = should_dither(dither_value, dither_lookup_b[rgb.blue]) ? gamma_lookup_b[rgb.blue] + 1: gamma_lookup_b[rgb.blue];
 
     set_led(i, r_adjusted, g_adjusted, b_adjusted);
   }
