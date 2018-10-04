@@ -315,12 +315,14 @@ void loop() {
     // Convert HSV to RGB
     CHSV hsv(cur_payload[i * 3 + 0], cur_payload[i * 3 + 1], cur_payload[i * 3 + 2]);
     CRGB rgb;
-    hsv2rgb_rainbow(hsv, rgb);
+    //hsv2rgb_rainbow(hsv, rgb);
+    hsv2rgb_spectrum(hsv, rgb);
 
     // Convert HSV with maxed out brightness to RGB
     CHSV hsv_max(cur_payload[i * 3 + 0], cur_payload[i * 3 + 1], 255);
     CRGB rgb_max;
-    hsv2rgb_rainbow(hsv_max, rgb_max);
+    //hsv2rgb_rainbow(hsv_max, rgb_max);
+    hsv2rgb_spectrum(hsv_max, rgb_max);
 
     uint8_t r_adjusted = should_dither(dither_value, dither_lookup_r[rgb.red]) ? gamma_lookup_r[rgb.red] + 1: gamma_lookup_r[rgb.red];
     uint8_t g_adjusted = should_dither(dither_value, dither_lookup_g[rgb.green]) ? gamma_lookup_g[rgb.green] + 1: gamma_lookup_g[rgb.green];
