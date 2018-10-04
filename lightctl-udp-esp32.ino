@@ -47,6 +47,16 @@ constexpr uint16_t NUM_LEDS[] = {60, 73};
 
 #define MAX_MA 1500
 
+#elif CONFIG == 3
+#define ID "Block"
+
+#define NUM_STRIPS 1
+constexpr uint16_t DATA_PINS[] = {13};
+constexpr uint16_t NUM_LEDS[] = {16};
+#define TOTAL_LEDS 16
+
+#define MAX_MA 500
+
 #endif
 
 // Enable debug mode
